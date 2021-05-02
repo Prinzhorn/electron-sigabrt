@@ -9,8 +9,7 @@ let request = new messages.HeartbeatRequest();
 function makeCall() {
   client.handleHeartbeat(request, function (err) {
     if (err) {
-      console.error(err);
-      process.exit(1);
+      process.exit(0);
     } else {
       console.log('heartbeat success');
     }
