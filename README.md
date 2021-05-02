@@ -11,4 +11,4 @@ npm run client
 
 `client` will bombard the server with gRPC calls to make sure there's some stream action going on almost constantly.
 
-`server` will `app.quit()` after two seconds and trigger an SIGABRT if it happens to happen at the right moment. Should happen after a single digit amount of tries.
+`server` will `app.quit()` after two seconds and trigger a SIGABRT if it happens to happen at the right moment. Should happen after a single digit amount of tries.
