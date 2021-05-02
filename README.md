@@ -1,6 +1,6 @@
 # Electron SIGABRT
 
-This reproduces a SIGBART in streams when closing an Electron app with at least one window while an active gRPC communication is happening inside a worker thread.
+This reproduces a SIGBART in streams when closing an Electron app while an active gRPC communication is happening inside a worker thread.
 
 ```
 git clone
