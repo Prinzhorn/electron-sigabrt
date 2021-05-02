@@ -7,7 +7,7 @@ const server = new grpc.Server();
 server.addService(services.HeartbeatService, {
   handleHeartbeat: function (call, callback) {
     let reply = new messages.HeartbeatReply();
-    console.log('heartbeat');
+    console.log('heartbeat request');
     callback(null, reply);
   },
 });
