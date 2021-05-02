@@ -4,7 +4,8 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "grpc": "grpc_tools_node_protoc --js_out=import_style=commonjs,binary:./ --grpc_out=grpc_js:./ --plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` ./heartbeat.proto"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -18,6 +19,11 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^12.0.6",
+    "grpc-tools": "^1.11.1",
     "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.3.0",
+    "google-protobuf": "^3.15.8"
   }
 }

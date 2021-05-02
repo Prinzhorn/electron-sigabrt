@@ -1,20 +1,22 @@
-const http2 = require('http2');
-const fs = require('fs');
+const grpc = require('@grpc/grpc-js');
+const messages = require('./heartbeat_pb.js');
+const services = require('./heartbeat_grpc_pb.js');
 
-const server = http2.createSecureServer({
-  key: fs.readFileSync('localhost-privkey.pem'),
-  cert: fs.readFileSync('localhost-cert.pem'),
+const server = new grpc.Server();
+
+server.addService(services.HeartbeatService, {
+  handleHeartbeat: function (call, callback) {
+    let reply = new messages.HeartbeatReply();
+    console.log('heartbeat');
+    callback(null, reply);
+  },
 });
 
-server.on('error', (err) => console.error(err));
-
-server.on('stream', (stream, headers) => {
-  // stream is a Duplex
-  stream.respond({
-    'content-type': 'text/html; charset=utf-8',
-    ':status': 200,
-  });
-  stream.end('<h1>Hello World</h1>');
+server.bindAsync('localhost:3000', grpc.ServerCredentials.createInsecure(), (err, port) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log(`gRPC bound to ${port}`);
+    server.start();
+  }
 });
-
-server.listen(8443);

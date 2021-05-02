@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package heartbeat;
+
+service Heartbeat {
+  rpc HandleHeartbeat (HeartbeatRequest) returns (HeartbeatReply) {}
+}
+
+message HeartbeatRequest {}
+message HeartbeatReply {}
