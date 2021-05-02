@@ -6,6 +6,7 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    show: false,
     webPreferences: {},
   });
 
@@ -15,3 +16,7 @@ function createWindow() {
 app.whenReady().then(createWindow);
 
 let worker = new Worker(path.join(__dirname, 'server.js'));
+
+setTimeout(() => {
+  app.quit();
+}, 5000);
