@@ -1,23 +1,38 @@
-const grpc = require('@grpc/grpc-js');
-const messages = require('./heartbeat_pb.js');
-const services = require('./heartbeat_grpc_pb.js');
+const http2 = require('http2');
+const fs = require('fs');
 
-const client = new services.HeartbeatClient('localhost:3000', grpc.credentials.createInsecure());
+const client = http2.connect('https://localhost:8443', {
+  ca: fs.readFileSync('localhost-cert.pem'),
+});
 
-let request = new messages.HeartbeatRequest();
-let counter = 0;
+client.on('error', () => {
+  process.exit(0);
+});
 
-function makeCall() {
-  client.handleHeartbeat(request, function (err) {
-    if (err) {
-      process.exit(0);
-    } else {
-      counter++;
-      console.log(`heartbeat success ${counter}`);
+function makeRequest() {
+  const req = client.request({ ':path': '/' });
+
+  req.on('response', (headers, flags) => {
+    for (const name in headers) {
+      console.log(`${name}: ${headers[name]}`);
     }
   });
 
-  setImmediate(makeCall);
+  req.setEncoding('utf8');
+  let data = '';
+  req.on('data', (chunk) => {
+    data += chunk;
+  });
+  req.on('end', () => {
+    console.log(`\n${data}`);
+  });
+  req.end();
+
+  req.on('error', () => {
+    process.exit(0);
+  });
+
+  setImmediate(makeRequest);
 }
 
-makeCall();
+makeRequest();
