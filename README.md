@@ -1,6 +1,6 @@
-# Electron SIGABRT
+# gRPC + Worker.terminate() = SIGABRT
 
-This reproduces a SIGBART in streams when closing an Electron app while an active gRPC communication is happening inside a worker thread.
+This reproduces a SIGABRT in http/2 streams when terminating a worker thread in the middle of gRPC communication
 
 ```
 git clone
@@ -9,6 +9,6 @@ npm run server
 npm run client
 ```
 
-`client` will bombard the server with gRPC calls to make sure there's some stream action going on almost constantly.
+`server` will run `index.js` which starts `server.js` in a worker. The worker will start a simple gRPC server. After two seconds `worker.terminate()` will be called, which triggers the SIGABRT if it happens at the right moment.
 
-`server` will `app.quit()` after two seconds and trigger a SIGABRT if it happens to happen at the right moment. Should happen after a single digit amount of tries.
+`client` will bombard the server with gRPC calls to make sure there's some stream action going on almost constantly.
